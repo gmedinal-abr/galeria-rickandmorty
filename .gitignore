@@ -1,0 +1,10 @@
+# Dependencias del sistema y del editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Entornos y editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

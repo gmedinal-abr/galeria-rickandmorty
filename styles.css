@@ -1,0 +1,290 @@
+/* ==========================================================================
+   ESTILOS PERSONALIZADOS - GALERÍA RICK AND MORTY (SPA)
+   Paleta inspirada en Rick & Morty + Dark Theme Moderno
+   ========================================================================== */
+
+:root {
+  --rm-bg-dark: #1b1e23;
+  --rm-card-bg: #272b33;
+  --rm-card-hover: #323742;
+  --rm-text-primary: #f5f5f5;
+  --rm-text-secondary: #9e9e9e;
+  --rm-portal-green: #55cc44;
+  --rm-dead-red: #d63d2e;
+  --rm-unknown-gray: #9e9e9e;
+  --rm-cyan-accent: #00b5cc;
+  --rm-primary-btn: #0d6efd;
+  --rm-primary-btn-hover: #0b5ed7;
+  --rm-border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Base Body */
+body {
+  background-color: var(--rm-bg-dark);
+  color: var(--rm-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* Header & Titles */
+.app-header {
+  background: linear-gradient(180deg, #16181d 0%, var(--rm-bg-dark) 100%);
+  border-bottom: 1px solid var(--rm-border-color);
+}
+
+.main-title {
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* Status Indicators (Puntos de Estado) */
+.status-indicator {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.status-indicator.status-alive {
+  background-color: var(--rm-portal-green);
+  box-shadow: 0 0 8px rgba(85, 204, 68, 0.7);
+}
+
+.status-indicator.status-dead {
+  background-color: var(--rm-dead-red);
+  box-shadow: 0 0 8px rgba(214, 61, 46, 0.7);
+}
+
+.status-indicator.status-unknown {
+  background-color: var(--rm-unknown-gray);
+  box-shadow: 0 0 4px rgba(158, 158, 158, 0.5);
+}
+
+/* Card Styles */
+.character-card {
+  background-color: var(--rm-card-bg);
+  border: 1px solid var(--rm-border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), 
+              box-shadow 0.25s cubic-bezier(0.165, 0.84, 0.44, 1),
+              background-color 0.25s ease;
+}
+
+.character-card:hover {
+  transform: translateY(-6px);
+  background-color: var(--rm-card-hover);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+}
+
+.card-img-container {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: #1a1c20;
+  position: relative;
+}
+
+.character-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.character-card:hover .character-card-img {
+  transform: scale(1.04);
+}
+
+.character-name {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.character-meta {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.location-block {
+  margin-bottom: 1.15rem;
+}
+
+.location-label {
+  font-size: 0.825rem;
+  color: var(--rm-text-secondary);
+  text-transform: capitalize;
+  margin-bottom: 0.15rem;
+}
+
+.location-value {
+  color: #f0f0f0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Detail Button */
+.btn-detail {
+  background-color: var(--rm-primary-btn);
+  border: none;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-detail:hover {
+  background-color: var(--rm-primary-btn-hover);
+  transform: translateY(-1px);
+}
+
+.btn-detail:active {
+  transform: translateY(0);
+}
+
+/* Pagination */
+.pagination-wrapper {
+  background-color: var(--rm-card-bg);
+  border: 1px solid var(--rm-border-color);
+  border-radius: 50px;
+  padding: 0.5rem 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.btn-pagination {
+  border-radius: 30px;
+  padding: 0.45rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.page-indicator-badge {
+  font-weight: 600;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  min-width: 130px;
+  text-align: center;
+}
+
+/* Modal Dark Styling */
+.modal-content-custom {
+  background-color: #242830;
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header-custom {
+  border-bottom: 1px solid var(--rm-border-color);
+  padding: 1.2rem 1.5rem;
+}
+
+.modal-footer-custom {
+  border-top: 1px solid var(--rm-border-color);
+  padding: 1rem 1.5rem;
+}
+
+.modal-character-img {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Table in Modal */
+.character-detail-table {
+  width: 100%;
+  margin-bottom: 0;
+  color: #e2e8f0;
+}
+
+.character-detail-table tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.character-detail-table tr:last-child {
+  border-bottom: none;
+}
+
+.character-detail-table th {
+  color: var(--rm-text-secondary);
+  font-weight: 600;
+  padding: 0.55rem 0.75rem 0.55rem 0;
+  width: 38%;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.character-detail-table td {
+  color: #ffffff;
+  padding: 0.55rem 0;
+  font-weight: 500;
+  font-size: 0.95rem;
+  vertical-align: middle;
+}
+
+/* Spinner & States */
+.spinner-container {
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-spinner {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-width: 0.35rem;
+  color: var(--rm-cyan-accent);
+}
+
+/* Error Container */
+.error-card {
+  background-color: rgba(214, 61, 46, 0.12);
+  border: 1px solid rgba(214, 61, 46, 0.3);
+  border-radius: 12px;
+  color: #ffb3ad;
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Footer */
+.app-footer {
+  background-color: #14161a;
+  border-top: 1px solid var(--rm-border-color);
+  color: var(--rm-text-secondary);
+  font-size: 0.875rem;
+}

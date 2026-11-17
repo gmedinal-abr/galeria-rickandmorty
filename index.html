@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Galería interactiva de personajes de Rick and Morty consumiendo The Rick and Morty API. Desarrollada con HTML, CSS, JavaScript Vanilla y Bootstrap 5.">
+  <title>Personajes de Rick and Morty</title>
+
+  <!-- Favicon temático -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+
+  <!-- Bootstrap 5 CSS (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Bootstrap Icons (CDN opcional para enriquecer la interfaz) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Estilos Personalizados (Ruta Relativa) -->
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- Encabezado Principal -->
+  <header class="app-header py-4 text-center">
+    <div class="container">
+      <h1 class="main-title display-5 mb-2">Personajes de Rick and Morty</h1>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="py-5">
+    <div class="container">
+
+      <!-- Indicador de Carga (Spinner) -->
+      <section id="loadingSpinner" class="spinner-container" aria-live="polite">
+        <div class="spinner-border portal-spinner" role="status">
+          <span class="visually-hidden">Cargando personajes...</span>
+        </div>
+        <p class="mt-3 text-secondary fw-semibold">Cargando personajes desde la dimensión C-137...</p>
+      </section>
+
+      <!-- Mensaje de Error (Oculto por defecto) -->
+      <section id="errorContainer" class="d-none" aria-live="assertive">
+        <div class="error-card shadow">
+          <i class="bi bi-exclamation-triangle-fill fs-1 text-danger mb-2 d-block"></i>
+          <h2 class="h4 fw-bold text-white mb-2">¡Ups! Algo salió mal</h2>
+          <p id="errorMessage" class="mb-4">No se pudieron cargar los datos de la API. Verifica tu conexión a internet o intenta nuevamente.</p>
+          <button id="btnRetry" class="btn btn-outline-light px-4 py-2 fw-semibold">
+            <i class="bi bi-arrow-clockwise me-1"></i> Reintentar
+          </button>
+        </div>
+      </section>
+
+      <!-- Cuadrícula de Tarjetas de Personajes -->
+      <section id="charactersContainer" class="d-none">
+        <!-- Fila con cuadrícula responsive: 4 por fila en desktop (col-lg-3), 2 en tablet (col-md-6) y 1 en móvil (col-12) -->
+        <div id="charactersRow" class="row g-4">
+          <!-- Las tarjetas se generan dinámicamente con JavaScript -->
+        </div>
+
+        <!-- Paginación Central Inferior -->
+        <nav class="mt-5 text-center" aria-label="Navegación de páginas de personajes">
+          <div class="pagination-wrapper">
+            <button id="btnPrev" class="btn btn-primary btn-pagination" type="button" aria-label="Página anterior">
+              &laquo; Anterior
+            </button>
+            <span id="pageIndicator" class="page-indicator-badge">Página 1 de 42</span>
+            <button id="btnNext" class="btn btn-primary btn-pagination" type="button" aria-label="Página siguiente">
+              Siguiente &raquo;
+            </button>
+          </div>
+        </nav>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Ventana Modal de Detalles (Bootstrap 5 Modal) -->
+  <div class="modal fade" id="characterDetailModal" tabindex="-1" aria-labelledby="modalCharacterName" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content modal-content-custom">
+        
+        <!-- Cabecera del Modal -->
+        <div class="modal-header modal-header-custom align-items-center">
+          <h2 class="modal-title h5 text-white fw-bold mb-0" id="modalCharacterName">Cargando...</h2>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <!-- Cuerpo del Modal -->
+        <div class="modal-body p-4">
+          
+          <!-- Spinner interno mientras se obtienen los datos del personaje -->
+          <div id="modalLoadingSpinner" class="text-center py-4 d-none">
+            <div class="spinner-border portal-spinner" role="status">
+              <span class="visually-hidden">Cargando detalles...</span>
+            </div>
+            <p class="mt-3 text-secondary">Obteniendo información del personaje...</p>
+          </div>
+
+          <!-- Contenido de Detalles -->
+          <div id="modalDetailsContent" class="row align-items-center g-4">
+            <!-- Columna Izquierda: Imagen del personaje -->
+            <div class="col-12 col-md-5 text-center">
+              <img id="modalCharacterImage" src="" alt="Imagen de personaje" class="modal-character-img img-fluid">
+            </div>
+
+            <!-- Columna Derecha: Tabla detallada -->
+            <div class="col-12 col-md-7">
+              <table class="character-detail-table">
+                <tbody>
+                  <tr>
+                    <th scope="row">ID</th>
+                    <td id="modalCharId">-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Estado</th>
+                    <td id="modalCharStatus">
+                      <span id="modalStatusDot" class="status-indicator"></span>
+                      <span id="modalStatusText">-</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Especie</th>
+                    <td id="modalCharSpecies">-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Género</th>
+                    <td id="modalCharGender">-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Tipo</th>
+                    <td id="modalCharType">-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Origen</th>
+                    <td id="modalCharOrigin">-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Última ubicación</th>
+                    <td id="modalCharLocation">-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Episodios</th>
+                    <td id="modalCharEpisodes">-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Creado</th>
+                    <td id="modalCharCreated">-</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Error en Modal si falla la petición individual -->
+          <div id="modalErrorContainer" class="alert alert-danger d-none mb-0 text-center" role="alert">
+            No se pudieron cargar los detalles del personaje. Por favor, intenta de nuevo.
+          </div>
+
+        </div>
+
+        <!-- Pie del Modal -->
+        <div class="modal-footer modal-footer-custom">
+          <button type="button" class="btn btn-secondary px-4 py-2 fw-semibold" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de Página Informativo -->
+  <footer class="app-footer py-3 text-center">
+    <div class="container">
+      <p class="mb-0">
+        Actividad Práctica · Grecia Medina · DWES | Fuente de datos: 
+        <a href="https://rickandmortyapi.com" target="_blank" rel="noopener noreferrer" class="text-info text-decoration-none fw-semibold">The Rick and Morty API</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle con Popper (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Script Principal de la SPA (Ruta Relativa) -->
+  <script src="./script.js" defer></script>
+</body>
+</html>
